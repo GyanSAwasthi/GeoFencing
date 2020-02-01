@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/linearlayout"
+    tools:context=".view.PointTestActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/headersize"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/headersize"
+            android:textColor="@android:color/holo_green_dark"
+            android:text="@string/header"/>
+
+        <EditText
+            android:id="@+id/et_lat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/latHint" />
+
+        <EditText
+            android:id="@+id/et_long"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/longHint" />
+
+        <Button
+            android:id="@+id/btnSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/holo_green_dark"
+            android:textColor="@android:color/white"
+            android:text="@string/btnSubmit"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>
