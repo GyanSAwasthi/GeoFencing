@@ -2,8 +2,10 @@ package com.example.geofencing.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,13 +26,19 @@ public class PointTestActivity extends AppCompatActivity implements IDisplayResu
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_point_test);
+        final Context context = this;
         etLat = (EditText) findViewById(R.id.et_lat);
         etLong = (EditText) findViewById(R.id.et_long);
         Button btnSubmit = (Button) findViewById(R.id.btnSubmit);
 
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                readAndParseJsonFile();
+                if (!TextUtils.isEmpty(etLat.getText().toString()) && !TextUtils.isEmpty(etLong.getText().toString())) {
+                    readAndParseJsonFile();
+                } else {
+                    Toast.makeText(context,"Please enter proper latitude and longitude!",Toast.LENGTH_LONG).show();                }
+
+
             }
         });
     }
@@ -39,12 +47,16 @@ public class PointTestActivity extends AppCompatActivity implements IDisplayResu
      * This method read and parse the json file.
      */
     private void readAndParseJsonFile() {
-        AssetManager assetManager = getAssets();
-        PointTestPresenter pointTestPresenter = new PointTestPresenter(this);
-        Double latValue = new Double(etLat.getText().toString());
-        Double lngValue = new Double(etLong.getText().toString());
-        LatLng currentLocationLatLng = new LatLng(latValue, lngValue);
-        pointTestPresenter.parseJson(pointTestPresenter.loadJsonFromAssets(assetManager), currentLocationLatLng);
+        try {
+            AssetManager assetManager = getAssets();
+            PointTestPresenter pointTestPresenter = new PointTestPresenter(this);
+            Double latValue = new Double(etLat.getText().toString());
+            Double lngValue = new Double(etLong.getText().toString());
+            LatLng currentLocationLatLng = new LatLng(latValue, lngValue);
+            pointTestPresenter.parseJson(pointTestPresenter.loadJsonFromAssets(assetManager), currentLocationLatLng);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

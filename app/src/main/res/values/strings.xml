@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">GeoFencing</string>
     <string name="btnSubmit">Submit</string>
-    <string name="latHint">Enter lat</string>
-    <string name="longHint">Enter long</string>
+    <string name="latHint">Enter latitude</string>
+    <string name="longHint">Enter longitude</string>
     <string name="header">Geo Fence</string>
 
 
