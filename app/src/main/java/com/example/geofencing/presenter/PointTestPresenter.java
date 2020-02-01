@@ -1,26 +1,17 @@
 package com.example.geofencing.presenter;
 
 import android.content.res.AssetManager;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.example.geofencing.LocationsDataModel.Geometry;
 import com.example.geofencing.LocationsDataModel.LocationsDM;
 import com.example.geofencing.view.IDisplayResult;
-import com.example.geofencing.view.PointTestActivity;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Polygon;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
 import com.google.maps.android.PolyUtil;
 import com.google.maps.android.SphericalUtil;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;

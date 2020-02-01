@@ -1,7 +1,5 @@
 package com.example.geofencing.view;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.Bundle;
@@ -9,15 +7,13 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.geofencing.R;
 import com.example.geofencing.presenter.PointTestPresenter;
 import com.google.android.gms.maps.model.LatLng;
-
-import java.io.IOException;
-import java.io.InputStream;
 
 public class PointTestActivity extends AppCompatActivity implements IDisplayResult {
     EditText etLat, etLong;
