@@ -3,7 +3,6 @@ package com.example.geofencing;
 import android.content.Context;
 
 import androidx.test.platform.app.InstrumentationRegistry;
-git init
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

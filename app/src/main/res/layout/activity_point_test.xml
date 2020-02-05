@@ -2,46 +2,56 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearlayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/linearlayout"
     tools:context=".view.PointTestActivity">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/headersize"
-            android:gravity="center"
-            android:layout_marginTop="@dimen/headersize"
-            android:textColor="@android:color/holo_green_dark"
-            android:text="@string/header"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/et_lat"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/latHint" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/headersize"
+                android:gravity="center"
+                android:text="@string/header"
+                android:textColor="@android:color/holo_green_dark"
+                android:textSize="@dimen/headersize" />
 
-        <EditText
-            android:id="@+id/et_long"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/longHint" />
+            <EditText
+                android:id="@+id/et_lat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/latHint" />
 
-        <Button
-            android:id="@+id/btnSubmit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/holo_green_dark"
-            android:textColor="@android:color/white"
-            android:text="@string/btnSubmit"/>
+            <EditText
+                android:id="@+id/et_long"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/longHint" />
 
-    </LinearLayout>
+            <EditText
+                android:id="@+id/et_aquracy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/accuracyHint" />
 
+            <Button
+                android:id="@+id/btnSubmit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/holo_green_dark"
+                android:text="@string/btnSubmit"
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

@@ -3,7 +3,11 @@
     <string name="btnSubmit">Submit</string>
     <string name="latHint">Enter latitude</string>
     <string name="longHint">Enter longitude</string>
+    <string name="accuracyHint">Enter Accuracy</string>
     <string name="header">Geo Fence</string>
+    <string name="dialog_message">GeoFence Message</string>
+    <string name="exit_map">Exit Map</string>
+    <string name="dont_exit_map">Keep in Map</string>
 
 
 </resources>

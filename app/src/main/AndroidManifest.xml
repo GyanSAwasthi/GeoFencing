@@ -20,8 +20,8 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity
-            android:name=".view.PointTestActivity">
+        <activity android:name=".view.MapActivity" />
+        <activity android:name=".view.PointTestActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

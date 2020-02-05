@@ -1,14 +1,18 @@
 package com.example.geofencing.presenter;
 
 import android.content.res.AssetManager;
+import android.graphics.Color;
 
 import com.example.geofencing.LocationsDataModel.Geometry;
 import com.example.geofencing.LocationsDataModel.LocationsDM;
 import com.example.geofencing.view.IDisplayResult;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.gson.Gson;
 import com.google.maps.android.PolyUtil;
-import com.google.maps.android.SphericalUtil;
 
 import org.json.JSONObject;
 
@@ -20,7 +24,7 @@ import java.util.List;
 /**
  * This is presenter class contains all the business logic.
  */
-public class PointTestPresenter {
+public class MapPresenter {
 
     /**
      * Interface ref.
@@ -28,11 +32,21 @@ public class PointTestPresenter {
     IDisplayResult displayResult;
 
     /**
+     * Initialization of array list which contains list of lat and long.
+     */
+    ArrayList<LatLng> locations = new ArrayList();
+
+    /**
+     * Double variable which contains the distance of point from GeoFence.
+     */
+   // double distance;
+
+    /**
      * Constructor of presenter.
      *
      * @param displayResult ref of interface.
      */
-    public PointTestPresenter(IDisplayResult displayResult) {
+    public MapPresenter(IDisplayResult displayResult) {
         this.displayResult = displayResult;
     }
 
@@ -66,12 +80,12 @@ public class PointTestPresenter {
     /**
      * This method read and parse the json.
      *
-     * @param jsonFileTxt           text of json file.
+     * @param jsonFileTxt text of json file.
      * @param currentLocationLatLng latlong input is given by user.
      */
-    public void parseJson(String jsonFileTxt, LatLng currentLocationLatLng) {
+    public ArrayList<LatLng> parseJson(String jsonFileTxt, LatLng currentLocationLatLng) {
         try {
-            ArrayList<LatLng> locations = new ArrayList();
+
             JSONObject obj = new JSONObject(jsonFileTxt);
             Gson gson = new Gson();
             LocationsDM locationsDM = null;
@@ -83,43 +97,33 @@ public class PointTestPresenter {
                 double lon = geometry.getLon();
                 locations.add(new LatLng(lat, lon));
             }
-            isLocationWithInArea(currentLocationLatLng, locations);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return locations;
     }
 
     /**
-     * Calculates the distacne from the given lat and long.
+     * Calculates the distance from the given latitude and longitude.
      *
      * @param currentLocationLatLng latitude and longitude value given by the user
      * @param locationsList         List of all latitude and longitude values.
+     * @param accuracyValue accuracy value.
      */
-    private void isLocationWithInArea(LatLng currentLocationLatLng, ArrayList<LatLng> locationsList) {
-        LatLng nearestPoint = findNearestPoint(currentLocationLatLng, locationsList);
-
-        double distanceAccuracy = SphericalUtil.computeDistanceBetween(currentLocationLatLng, nearestPoint);
-        if (distanceAccuracy > 60) {
-            displayResult.DisplayResponse(false);
-        } else {
-            displayResult.DisplayResponse(true);
+    public boolean isLocationWithInArea(LatLng currentLocationLatLng, ArrayList<LatLng> locationsList, double accuracyValue) {
+       double distance = calculateDistance(currentLocationLatLng, locationsList);
+        if (distance > accuracyValue) {
+            return false;
         }
+        return true;
     }
 
     /**
-     * Calculates the nearest distance.
-     *
-     * @param currentLocationLatLng curent Latitude and longitude.
-     * @param locationsList         List of latitude and longitude.
-     * @return Minimum distance
+     * @param currentLocationLatLng current location latitude and longitude
+     * @param locationsList         list of LatLng
      */
-    private LatLng findNearestPoint(LatLng currentLocationLatLng, List<LatLng> locationsList) {
-        double distance = -1;
-        LatLng minimumDistancePoint = currentLocationLatLng;
-
-        if (currentLocationLatLng == null || locationsList == null) {
-            return minimumDistancePoint;
-        }
+    public double calculateDistance(LatLng currentLocationLatLng, List<LatLng> locationsList) {
+       double distance = -1;
 
         for (int i = 0; i < locationsList.size(); i++) {
             LatLng point = locationsList.get(i);
@@ -131,46 +135,36 @@ public class PointTestPresenter {
 
             double currentDistance = PolyUtil.distanceToLine(currentLocationLatLng, point, locationsList.get(segmentPoint));
             if (distance == -1 || currentDistance < distance) {
-                distance = currentDistance;
-                minimumDistancePoint = findNearestPoint(currentLocationLatLng, point, locationsList.get(segmentPoint));
+                distance = currentDistance / 1000;
             }
         }
-
-        return minimumDistancePoint;
+        System.out.println("distance : " + distance+" k.m");
+        return distance;
     }
 
     /**
-     * This calculate the nearest point and Based on `distanceToLine` method.
-     *
-     * @param p     LatLng.
-     * @param start LatLng.
-     * @param end   LatLng.
-     * @return mimimum distance point.
+     * This method draw geo fence on google map.
+     * @param mMap  google map
+     * @param locationsList List Of latitude and longitude.
      */
-    private LatLng findNearestPoint(final LatLng p, final LatLng start, final LatLng end) {
-        if (start.equals(end)) {
-            return start;
+    public void drawGeoFence(GoogleMap mMap, ArrayList<LatLng> locationsList) {
+        PolylineOptions options = new PolylineOptions().width(5).color(Color.RED).geodesic(true);
+        for (int z = 0; z < locationsList.size(); z++) {
+            LatLng point = locationsList.get(z);
+            options.add(point);
         }
+        mMap.addPolyline(options);
+        CameraPosition cameraPosition;
+        cameraPosition = new CameraPosition.Builder().target(locationsList.get(0)).zoom(15).build();
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
-        final double s0lat = Math.toRadians(p.latitude);
-        final double s0lng = Math.toRadians(p.longitude);
-        final double s1lat = Math.toRadians(start.latitude);
-        final double s1lng = Math.toRadians(start.longitude);
-        final double s2lat = Math.toRadians(end.latitude);
-        final double s2lng = Math.toRadians(end.longitude);
+    }
 
-        double s2s1lat = s2lat - s1lat;
-        double s2s1lng = s2lng - s1lng;
-        final double u = ((s0lat - s1lat) * s2s1lat + (s0lng - s1lng) * s2s1lng)
-                / (s2s1lat * s2s1lat + s2s1lng * s2s1lng);
-        if (u <= 0) {
-            return start;
-        }
-        if (u >= 1) {
-            return end;
-        }
-
-        return new LatLng(start.latitude + (u * (end.latitude - start.latitude)),
-                start.longitude + (u * (end.longitude - start.longitude)));
+    /**
+     * Display the response that the given lat long are inside GeoFence.
+     * @param isPresent boolean value of response.
+     */
+    public void displayResponseDialog(boolean isPresent) {
+         displayResult.DisplayResponse(isPresent);
     }
 }
